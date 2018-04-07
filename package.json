@@ -1,0 +1,38 @@
+{
+  "name": "hologramrose-invoice",
+  "engines": {
+    "node": "9.11.1",
+    "yarn": "1.5.1"
+  },
+  "scripts": {
+    "start": "dotenv -- nodemon -e ts,graphql -x ts-node src/index.ts",
+    "debug": "dotenv -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
+    "build": "rimraf dist && tsc",
+    "test": "yarn prettier && yarn lint && yarn build",
+    "lint": "tslint 'src/**/*.ts'",
+    "lint:fix": "tslint --fix 'src/**/*.ts'",
+    "prettier": "prettier --list-different \"src/**/*.ts\"",
+    "prettier:fix": "prettier --write \"src/**/*.ts\"",
+    "heroku-postbuild": "yarn build"
+  },
+  "dependencies": {
+    "express": "4.16.3",
+    "html-minifier": "3.5.13",
+    "html5-to-pdf": "2.2.9",
+    "mustache": "2.3.0",
+    "strip-js": "1.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "4.11.1",
+    "@types/html-minifier": "3.5.2",
+    "@types/mustache": "0.8.30",
+    "dotenv-cli": "1.4.0",
+    "nodemon": "1.17.3",
+    "prettier": "1.11.1",
+    "rimraf": "2.6.2",
+    "supertest": "3.0.0",
+    "ts-node": "5.0.1",
+    "tslint": "5.9.1",
+    "typescript": "2.8.1"
+  }
+}
