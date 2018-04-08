@@ -21,12 +21,14 @@
     "html-minifier": "3.5.13",
     "html5-to-pdf": "2.2.9",
     "mustache": "2.3.0",
+    "node-fetch": "2.1.2",
     "strip-js": "1.2.0"
   },
   "devDependencies": {
     "@types/express": "4.11.1",
     "@types/html-minifier": "3.5.2",
     "@types/mustache": "0.8.30",
+    "@types/node-fetch": "1.6.8",
     "dotenv-cli": "1.4.0",
     "nodemon": "1.17.3",
     "prettier": "1.11.1",

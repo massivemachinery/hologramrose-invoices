@@ -1,6 +1,8 @@
 {
   "rules": {
     "no-any": true,
-    "ban-types": [true, ["Number"], ["String"], ["Boolean"], ["Object"]]
+    "ban-types": [true, ["Number"], ["String"], ["Boolean"], ["Object"]],
+    "no-var-keyword": true,
+    "prefer-const": true
   }
 }
