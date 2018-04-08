@@ -16,6 +16,7 @@
     "heroku-postbuild": "yarn build"
   },
   "dependencies": {
+    "ensure-root-url": "1.0.0",
     "express": "4.16.3",
     "html-minifier": "3.5.13",
     "html5-to-pdf": "2.2.9",
