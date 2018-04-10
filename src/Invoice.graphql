@@ -16,6 +16,7 @@ query Invoice($token: ID) {
       description
       quantity
       unitPrice
+      unit
       amount
     }
     issuedBy {

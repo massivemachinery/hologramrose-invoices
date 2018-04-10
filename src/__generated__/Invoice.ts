@@ -13,6 +13,7 @@ export interface Invoice_invoice_items {
   description: string;
   quantity: number;
   unitPrice: number;
+  unit: string;
   amount: number;
 }
 
@@ -69,6 +70,7 @@ export interface InvoiceVariables {
 
 export enum Currency {
   EUR = "EUR",
+  GBP = "GBP",
   USD = "USD",
 }
 
