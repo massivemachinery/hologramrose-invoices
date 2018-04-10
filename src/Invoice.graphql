@@ -1,0 +1,36 @@
+query Invoice($token: ID) {
+  invoice(token: $token) {
+    id
+    sequenceNumber
+    locked
+    customer
+    issuer
+    terms
+    issuedAt
+    dueAt
+    currency
+    amount
+    questions
+    items {
+      id
+      description
+      quantity
+      unitPrice
+      amount
+    }
+    issuedBy {
+      name
+      address
+      zipCode
+      state
+      city
+    }
+    issuedFor {
+      name
+      address
+      zipCode
+      state
+      city
+    }
+  }
+}
