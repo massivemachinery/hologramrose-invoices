@@ -3,7 +3,7 @@ import requireGraphQL from './require-graphql';
 import client from './graphql-client';
 import {InvoiceVariables, Invoice} from './__generated__/Invoice';
 
-const query = requireGraphQL('./Invoice');
+const query = requireGraphQL('./graphql/Invoice');
 
 export async function getTemplate() {
   const response = await fetch(
