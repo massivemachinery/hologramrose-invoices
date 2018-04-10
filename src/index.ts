@@ -4,9 +4,13 @@ import fetch from 'node-fetch';
 import mustache from 'mustache';
 import {minify} from 'html-minifier';
 import stripJs from 'strip-js';
-
 import requireGraphQL from './require-graphql';
 import client from './graphql-client';
+import {
+  InvoiceVariables,
+  Invoice,
+  Invoice_invoice,
+} from './__generated__/Invoice';
 
 const port = process.env.PORT || '5000';
 const rootUrl = process.env.ROOT_URL || 'http://localhost:5000';
@@ -19,11 +23,10 @@ async function getTemplate() {
   return response.text();
 }
 
-function generateHtml(template: string, invoice: InvoiceDoc) {
+function generateHtml(template: string, invoice: Invoice_invoice) {
   // const template = requireFile('./invoice.html');
 
   const view = {
-    // ...data,
     ...invoice,
 
     // Helpers
@@ -60,11 +63,11 @@ function generateHtml(template: string, invoice: InvoiceDoc) {
   return minify(html, {minifyCSS: true, collapseWhitespace: true});
 }
 
-async function getInvoice(token: string) {
-  const variables = {
+async function getInvoice(token: string): Promise<Invoice> {
+  const variables: InvoiceVariables = {
     token,
   };
-  return client(query, variables);
+  return (await client(query, variables)).data;
 }
 
 async function server() {
@@ -78,10 +81,13 @@ async function server() {
   });
 
   app.use('/:token', async (req, res) => {
-    const invoice = await getInvoice(req.params.token);
-    console.dir(invoice, {depth: null});
+    const queryResult = await getInvoice(req.params.token);
 
-    res.send(generateHtml(template, invoice.data.invoice));
+    if (!queryResult.invoice) {
+      return res.send(404);
+    }
+
+    res.send(generateHtml(template, queryResult.invoice));
   });
 
   app.listen(Number(port));

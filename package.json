@@ -13,6 +13,7 @@
     "lint:fix": "tslint --fix 'src/**/*.ts'",
     "prettier": "prettier --list-different \"src/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\"",
+    "codegen": "apollo-codegen introspect-schema http://localhost:4000/ --output /tmp/schema.json && apollo-codegen generate **/*.graphql --schema /tmp/schema.json --target typescript-modern --addTypename",
     "heroku-postbuild": "yarn build"
   },
   "dependencies": {
@@ -29,6 +30,7 @@
     "@types/html-minifier": "3.5.2",
     "@types/mustache": "0.8.30",
     "@types/node-fetch": "1.6.8",
+    "apollo-codegen": "0.19.1",
     "dotenv-cli": "1.4.0",
     "nodemon": "1.17.3",
     "prettier": "1.11.1",
