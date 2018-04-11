@@ -4,7 +4,7 @@ import {sendInvoice} from './middleware';
 import {getTemplate} from './utils';
 
 const port = process.env.PORT || '5000';
-const rootUrl = process.env.ROOT_URL || 'http://localhost:5000';
+const rootUrl = process.env.ROOT_URL || 'http://localhost:5000/';
 
 async function server() {
   const app = express();
@@ -31,7 +31,7 @@ async function server() {
 (async function() {
   try {
     await server();
-    console.log(`-> HTTP server running on port ${port}`);
+    console.log(`-> HTTP server running on ${rootUrl} (port ${port})`);
   } catch (error) {
     console.error(error);
   }
