@@ -31,7 +31,7 @@ async function server() {
 (async function() {
   try {
     await server();
-    console.log(`-> HTTP server running on ${rootUrl} (port ${port})`);
+    console.log(`🌹 -> HTTP server running on ${rootUrl} (port ${port})`);
   } catch (error) {
     console.error(error);
   }
