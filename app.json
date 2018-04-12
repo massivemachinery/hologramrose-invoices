@@ -12,13 +12,19 @@
       "required": false
     },
     "GRAPHQL_API": {
-      "required": true
+      "description":
+        "Make review apps inherit this env var from staging (required:false to allow Heroku CI to run without configuration)",
+      "required": false
     },
     "NODE_MODULES_CACHE": {
-      "required": true
+      "description":
+        "Make review apps inherit this env var from staging (required:false to allow Heroku CI to run without configuration)",
+      "required": false
     },
     "ROOT_URL": {
-      "required": true
+      "description":
+        "Make review apps inherit this env var from staging (required:false to allow Heroku CI to run without configuration)",
+      "required": false
     }
   },
   "formation": {
