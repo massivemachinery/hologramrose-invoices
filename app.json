@@ -1,9 +1,16 @@
 {
   "name": "hologramrose-invoices",
   "description": "Hologram Rose invoice server",
-  "scripts": {
-  },
+  "scripts": {},
   "env": {
+    "HEROKU_APP_NAME": {
+      "description": "This env is only set for review apps",
+      "required": false
+    },
+    "HEROKU_PARENT_APP_NAME": {
+      "description": "This env is only set for review apps",
+      "required": false
+    },
     "GRAPHQL_API": {
       "required": true
     },
@@ -19,9 +26,7 @@
       "quantity": 1
     }
   },
-  "addons": [
-
-  ],
+  "addons": [],
   "buildpacks": [
     {
       "url": "heroku/nodejs"
