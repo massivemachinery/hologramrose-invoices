@@ -1,17 +1,30 @@
 {
   "name": "hologramrose-invoices",
   "description": "Hologram Rose invoice server",
-  "scripts": {
-  },
+  "scripts": {},
   "env": {
+    "HEROKU_APP_NAME": {
+      "description": "This env is only set for review apps",
+      "required": false
+    },
+    "HEROKU_PARENT_APP_NAME": {
+      "description": "This env is only set for review apps",
+      "required": false
+    },
     "GRAPHQL_API": {
-      "required": true
+      "description":
+        "Make review apps inherit this env var from staging (required:false to allow Heroku CI to run without configuration)",
+      "required": false
     },
     "NODE_MODULES_CACHE": {
-      "required": true
+      "description":
+        "Make review apps inherit this env var from staging (required:false to allow Heroku CI to run without configuration)",
+      "required": false
     },
     "ROOT_URL": {
-      "required": true
+      "description":
+        "Make review apps inherit this env var from staging (required:false to allow Heroku CI to run without configuration)",
+      "required": false
     }
   },
   "formation": {
@@ -19,9 +32,7 @@
       "quantity": 1
     }
   },
-  "addons": [
-
-  ],
+  "addons": [],
   "buildpacks": [
     {
       "url": "heroku/nodejs"

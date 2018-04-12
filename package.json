@@ -20,7 +20,7 @@
     "ensure-root-url": "1.0.0",
     "express": "4.16.3",
     "html-minifier": "3.5.14",
-    "html5-to-pdf": "3.0.1",
+    "html5-to-pdf": "2.2.9",
     "mustache": "2.3.0",
     "node-fetch": "2.1.2",
     "strip-js": "1.2.0"
