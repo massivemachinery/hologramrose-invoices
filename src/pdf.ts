@@ -10,8 +10,11 @@ export default async function htmlToPdf(html: string) {
   });
 
   const page = await browser.newPage();
-  await page.setContent(html);
-  await page.waitFor(1000);
+
+  // https://github.com/GoogleChrome/puppeteer/issues/422
+  await page.goto('data:text/html,' + html, {waitUntil: 'networkidle2'});
+  // await page.setContent(html);
+  // await page.waitFor(1000);
 
   const pdfBuffer = await page.pdf({format: 'Letter', printBackground: true});
   await browser.close();
