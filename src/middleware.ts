@@ -72,7 +72,14 @@ function generateJson(invoice: Invoice_invoice) {
 
 export function sendInvoice(format: 'json' | 'html' | 'pdf', template: string) {
   return async function json(req: Request, res: Response, next: NextFunction) {
-    const {invoice} = await getInvoice(req.params.token);
+    let invoice;
+
+    try {
+      invoice = await getInvoice(req.params.token);
+    } catch (error) {
+      console.error(error);
+      return res.sendStatus(500);
+    }
 
     if (!invoice) {
       return next();
