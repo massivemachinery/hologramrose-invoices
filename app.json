@@ -38,6 +38,9 @@
       "url": "heroku/nodejs"
     },
     {
+      "url": "https://github.com/heroku/heroku-buildpack-xvfb-google-chrome"
+    },
+    {
       "url": "https://github.com/jontewks/puppeteer-heroku-buildpack"
     }
   ]
