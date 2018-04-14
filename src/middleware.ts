@@ -2,7 +2,7 @@ import {NextFunction, Response, Request} from 'express';
 import mustache from 'mustache';
 import {minify} from 'html-minifier';
 import stripJs from 'strip-js';
-import HTMLToPDF from 'html5-to-pdf';
+import HTML5ToPDF from 'html5-to-pdf';
 import {Invoice_invoice} from './__generated__/Invoice';
 import {getInvoice} from './utils';
 
@@ -49,21 +49,15 @@ function generateHtml(template: string, invoice: Invoice_invoice) {
 async function generatePdf(template: string, invoice: Invoice_invoice) {
   const html = generateHtml(template, invoice);
 
-  const htmlToPDF = new HTMLToPDF({
+  const html5ToPDF = new HTML5ToPDF({
     inputBody: html,
-    options: {
-      pageSize: 'Letter',
-      printBackground: true,
-    },
+    outputPath: '/tmp/pdf.pdf',
     renderDelay: 1000,
   });
 
-  return await new Promise((resolve, reject) => {
-    htmlToPDF.build((error: Error, buffer: Buffer) => {
-      if (error) reject(error);
-      else resolve(buffer);
-    });
-  });
+  await html5ToPDF.start();
+  await html5ToPDF.build();
+  await html5ToPDF.close();
 }
 
 function generateJson(invoice: Invoice_invoice) {
@@ -106,9 +100,14 @@ export function sendInvoice(format: 'json' | 'html' | 'pdf', template: string) {
           'Content-Disposition': 'inline; filename=' + fileName,
         });
 
-        generatePdf(template, invoice).then(r => {
-          res.send(r);
-        });
+        try {
+          await generatePdf(template, invoice);
+        } catch (error) {
+          console.error(error);
+          return res.sendStatus(500);
+        }
+
+        res.sendFile('/tmp/pdf.pdf');
         break;
       }
 
