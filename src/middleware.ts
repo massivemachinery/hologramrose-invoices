@@ -55,7 +55,7 @@ async function generatePdf(template: string, invoice: Invoice_invoice) {
     renderDelay: 1000,
   });
 
-  await html5ToPDF.start();
+  await html5ToPDF.start({args: ['--no-sandbox', '--disable-setuid-sandbox']});
   await html5ToPDF.build();
   await html5ToPDF.close();
 }
