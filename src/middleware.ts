@@ -2,9 +2,9 @@ import {NextFunction, Response, Request} from 'express';
 import mustache from 'mustache';
 import {minify} from 'html-minifier';
 import stripJs from 'strip-js';
-import HTML5ToPDF from 'html5-to-pdf';
 import {Invoice_invoice} from './__generated__/Invoice';
 import {getInvoice} from './utils';
+import htmlToPdf from './pdf';
 
 function generateHtml(template: string, invoice: Invoice_invoice) {
   // const template = requireFile('./invoice.html');
@@ -46,24 +46,6 @@ function generateHtml(template: string, invoice: Invoice_invoice) {
   return minify(html, {minifyCSS: true, collapseWhitespace: true});
 }
 
-async function generatePdf(template: string, invoice: Invoice_invoice) {
-  const html = generateHtml(template, invoice);
-
-  const html5ToPDF = new HTML5ToPDF({
-    inputBody: html,
-    outputPath: '/tmp/pdf.pdf',
-    renderDelay: 1000,
-  });
-
-  await html5ToPDF.start({args: ['--no-sandbox', '--disable-setuid-sandbox']});
-  await html5ToPDF.build();
-  await html5ToPDF.close();
-}
-
-function generateJson(invoice: Invoice_invoice) {
-  return invoice;
-}
-
 export function sendInvoice(format: 'json' | 'html' | 'pdf', template: string) {
   return async function json(req: Request, res: Response, next: NextFunction) {
     let invoice;
@@ -87,7 +69,7 @@ export function sendInvoice(format: 'json' | 'html' | 'pdf', template: string) {
           'Content-Disposition': 'inline; filename=' + fileName,
         });
 
-        res.send(generateJson(invoice));
+        res.send(invoice);
         // res.json(generateJson(invoice));
         break;
       }
@@ -101,13 +83,13 @@ export function sendInvoice(format: 'json' | 'html' | 'pdf', template: string) {
         });
 
         try {
-          await generatePdf(template, invoice);
+          const html = generateHtml(template, invoice);
+          const pdfBuffer = await htmlToPdf(html);
+          res.send(pdfBuffer);
         } catch (error) {
           console.error(error);
           return res.sendStatus(500);
         }
-
-        res.sendFile('/tmp/pdf.pdf');
         break;
       }
 
