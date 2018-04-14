@@ -2,9 +2,9 @@ import {NextFunction, Response, Request} from 'express';
 import mustache from 'mustache';
 import {minify} from 'html-minifier';
 import stripJs from 'strip-js';
-import HTMLToPDF from 'html5-to-pdf';
 import {Invoice_invoice} from './__generated__/Invoice';
 import {getInvoice} from './utils';
+import htmlToPdf from './pdf';
 
 function generateHtml(template: string, invoice: Invoice_invoice) {
   // const template = requireFile('./invoice.html');
@@ -46,33 +46,16 @@ function generateHtml(template: string, invoice: Invoice_invoice) {
   return minify(html, {minifyCSS: true, collapseWhitespace: true});
 }
 
-async function generatePdf(template: string, invoice: Invoice_invoice) {
-  const html = generateHtml(template, invoice);
-
-  const htmlToPDF = new HTMLToPDF({
-    inputBody: html,
-    options: {
-      pageSize: 'Letter',
-      printBackground: true,
-    },
-    renderDelay: 1000,
-  });
-
-  return await new Promise((resolve, reject) => {
-    htmlToPDF.build((error: Error, buffer: Buffer) => {
-      if (error) reject(error);
-      else resolve(buffer);
-    });
-  });
-}
-
-function generateJson(invoice: Invoice_invoice) {
-  return invoice;
-}
-
 export function sendInvoice(format: 'json' | 'html' | 'pdf', template: string) {
   return async function json(req: Request, res: Response, next: NextFunction) {
-    const {invoice} = await getInvoice(req.params.token);
+    let invoice;
+
+    try {
+      invoice = await getInvoice(req.params.token);
+    } catch (error) {
+      console.error(error);
+      return res.sendStatus(500);
+    }
 
     if (!invoice) {
       return next();
@@ -86,7 +69,7 @@ export function sendInvoice(format: 'json' | 'html' | 'pdf', template: string) {
           'Content-Disposition': 'inline; filename=' + fileName,
         });
 
-        res.send(generateJson(invoice));
+        res.send(invoice);
         // res.json(generateJson(invoice));
         break;
       }
@@ -99,9 +82,14 @@ export function sendInvoice(format: 'json' | 'html' | 'pdf', template: string) {
           'Content-Disposition': 'inline; filename=' + fileName,
         });
 
-        generatePdf(template, invoice).then(r => {
-          res.send(r);
-        });
+        try {
+          const html = generateHtml(template, invoice);
+          const pdfBuffer = await htmlToPdf(html);
+          res.send(pdfBuffer);
+        } catch (error) {
+          console.error(error);
+          return res.sendStatus(500);
+        }
         break;
       }
 

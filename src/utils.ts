@@ -12,9 +12,11 @@ export async function getTemplate() {
   return response.text();
 }
 
-export async function getInvoice(token: string): Promise<Invoice> {
+export async function getInvoice(token: string) {
   const variables: InvoiceVariables = {
     token,
   };
-  return (await client(query, variables)).data;
+
+  const r = await client<Invoice>(query, variables);
+  return r.invoice;
 }
