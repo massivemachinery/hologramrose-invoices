@@ -2,7 +2,7 @@
   "name": "hologramrose-invoice",
   "engines": {
     "node": "9.11.1",
-    "yarn": "1.6.0"
+    "yarn": "1.5.1"
   },
   "scripts": {
     "start": "dotenv -- nodemon -e ts,graphql -x ts-node src/index.ts",
